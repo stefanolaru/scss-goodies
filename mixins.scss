@@ -193,5 +193,50 @@
         @content;
     }
 }
-
 /* @end */
+
+/* @group BREAKPOINTS */
+
+$breakpoints: (
+  small: 0em,
+  medium: 40em,
+  large: 64em,
+  xlarge: 80em
+);
+
+@mixin breakpoint($val) {
+
+    /* breakpoint */
+    $breakpoint: nth($val, 1);
+
+    /* get direction */
+    $dir: if(length($val) > 1, nth($val, 2), up);
+
+    @if map-has-key($breakpoints, $breakpoint) {
+        $str: '(min-width: #{map-get($breakpoints, $breakpoint)})';
+
+        @if $dir == 'only' or $dir == 'down' {
+
+            $values: map-keys($breakpoints);
+            $i: index($values, $breakpoint) + 1;
+
+            @if ($i < length($breakpoints)) {
+                @if($dir == 'only') {
+                    $str: $str + ' and (max-width: #{map-get($breakpoints, nth($values, $i))})';
+                }
+                @else {
+                    $str: '(max-width: #{map-get($breakpoints, nth($values, $i))})';
+                }
+            }
+            
+        }
+
+        @media #{$str} {
+            @content;
+        }
+    }
+    @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Please make sure it is defined in `$breakpoints` map.";
+    }
+}
