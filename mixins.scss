@@ -91,6 +91,9 @@
 @mixin translate($x:0, $y:0) {
     @include transform(translate($x, $y));
 }
+@mixin skew($ax:0, $ay:0) {
+    @include transform(skew($ax, $ay));
+}
 /* @end */
 
 /* @group FILTERS */
